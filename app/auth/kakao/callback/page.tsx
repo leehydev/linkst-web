@@ -1,10 +1,10 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { Suspense, useEffect, useRef } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { setAccessToken } from "@/lib/auth";
 
-export default function KakaoCallbackPage() {
+function KakaoCallbackContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const isProcessing = useRef(false);
@@ -30,9 +30,15 @@ export default function KakaoCallbackPage() {
     }
   }, [searchParams, router]);
 
+  return <p>로그인 처리 중...</p>;
+}
+
+export default function KakaoCallbackPage() {
   return (
     <main className="flex min-h-screen items-center justify-center">
-      <p>로그인 처리 중...</p>
+      <Suspense fallback={<p>로딩 중...</p>}>
+        <KakaoCallbackContent />
+      </Suspense>
     </main>
   );
 }
